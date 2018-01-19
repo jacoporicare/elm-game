@@ -62,6 +62,18 @@ init =
     ( model, Cmd.none )
 
 
+fmod : Float -> Float -> Float
+fmod x m =
+    let
+        mx =
+            if x < 0 && m > 0 then
+                -m
+            else
+                m
+    in
+        x - mx * toFloat (floor (x / mx))
+
+
 
 -- UPDATE
 
@@ -211,7 +223,7 @@ physics dt model =
         { model
             | x = clamp -edgeX edgeX (model.x + xChange)
             , y = max 0 (model.y + dt * model.vy)
-            , angle = model.angle + turns (xChange / playerCircumference)
+            , angle = fmod (model.angle + turns (xChange / playerCircumference)) (2 * pi)
         }
 
 
